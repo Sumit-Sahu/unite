@@ -1,29 +1,29 @@
 import './App.css';
 import React, { useState, useEffect } from "react";
-import { io } from "socket.io-client";
-const ENDPOINT = "http://localhost:3001";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Home from './components/Home';
+import Video from './components/Video';
+import { socket } from './service/socket';
 
-
-function App() {
+const App = () => {
 
   const [response, setResponse] = useState("");
   useEffect(() => {
-    const socket = io(ENDPOINT);
     socket.on('error', error => {
       console.log(error);
     })
     socket.emit('test');
-    socket.on("FromAPI", data => {
-      setResponse(data);
-    });
   }, []);
 
   return (
-    <div className="App">
-      <div className="container mt-1"></div>
-      <input></input>
-      <button className="btn btn-primary">Connect</button>
-    </div>
+    <>
+      <Router>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/:url" component={Video} />
+        </Switch>
+      </Router>
+    </>
   );
 }
 

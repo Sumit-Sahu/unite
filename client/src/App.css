@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanalei&family=Hanalei+Fill&family=Open+Sans&family=Roboto:wght@700&display=swap');
 .App {
   text-align: center;
 }
@@ -35,4 +36,41 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.home {
+  background-color: #2E1F27;
+  min-height: 100vh;
+}
+.home .title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  color: #fae8eb;
+}
+
+.home .title h1{
+  font-weight: 900;
+  font-family: 'Hanalei', cursive;
+  font-size: 20vh;
+  letter-spacing: 2vw;
+
+}
+
+.home .title p{
+  font-weight: 900;
+  font-size: 40px;
+
+}
+
+.home .btn {
+  background-color: #fae8eb ;
+  color: #2E1F27;
+  font-size: 20px;
+}
+
+.home h2{
+  color: #fae8eb;
 }
