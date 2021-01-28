@@ -7,18 +7,19 @@ const videoGrid = document.getElementById("video-grid");
 const myVideo = document.createElement('video');
 myVideo.muted = true; 
 var peer = new Peer(undefined, {
-    path:'/peerjs',
-    host: location.hostname,
-    port: location.port || (location.protocol === 'https:' ? 443 : 80)
+    // path:'/peerjs',
+    // host: location.hostname,
+    // port: location.port || (location.protocol === 'https:' ? 443 : 80)
 });
 
 const peers = {};
+let myVideoStream;
 navigator.mediaDevices.getUserMedia({
     video: true,
     audio: true
 }).then(stream => {
     addVideoStream(myVideo, stream);
-
+    myVideoStream = stream;
     peer.on('call', call => {
         call.answer(stream);
         const video = document.createElement('video');
