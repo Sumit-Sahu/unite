@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import {socket} from '../service/socket';
 
 
 
@@ -7,15 +8,28 @@ const Home = () => {
     let history = useHistory();
     const [url, seturl] = useState('');
 
+    useEffect(() => {
+        socket.on('error', error => {
+            console.log(error);
+        })
+        
+    }, []);
+
     const join = () => {
-        let redirectUrl;
-        if(url !== ""){
+        let redirectUrl="";
+        if (url !== "") {
             redirectUrl = url.substring(url.lastIndexOf('/'));
+            history.push(redirectUrl);
         }
         else {
-            redirectUrl = "/";
+            socket.emit('create-meet-id');
+            socket.on('meet-id', id => {
+                console.log(id);
+                redirectUrl = `/${id}`;
+                console.log('setredurl',redirectUrl)
+                history.push(redirectUrl);
+            })
         }
-        history.push(redirectUrl);
     }
 
     return (
@@ -38,7 +52,7 @@ const Home = () => {
                     </div>
                     <div className="row justify-content-center">
                         <div className="col-md-5 mb-4">
-                            <input type="text" placeholder="Join Link" className="join-link form-control" onChange={e => {seturl(e.target.value);}}></input>
+                            <input type="text" placeholder="Join Link" className="join-link form-control" onChange={e => { seturl(e.target.value); }}></input>
                         </div>
                         <div className="col-auto mb-4">
                             <div className="join-meet">

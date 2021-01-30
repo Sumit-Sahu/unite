@@ -39,7 +39,9 @@ io.on('connection', (socket) => {
             socket.to(roomId).broadcast.emit('user-disconnected', userId);
         });
     });
-    socket.on("test", () => {
+    socket.on("create-meet-id", () => {
+        let id=v4()
+        socket.emit('meet-id', id);
         console.log('testing succeed');
     });
 })
