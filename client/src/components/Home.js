@@ -3,7 +3,6 @@ import { useHistory } from "react-router-dom";
 import {socket} from '../service/socket';
 
 
-
 const Home = () => {
     let history = useHistory();
     const [url, seturl] = useState('');
