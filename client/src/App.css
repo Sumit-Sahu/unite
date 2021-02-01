@@ -74,3 +74,24 @@
 .home h2{
   color: #fae8eb;
 }
+
+.video-container {
+  background-color: #2E1F27;
+  min-height: 100vh;
+}
+
+.video-main {
+  
+  width: 100vw;
+  height: 100vh;
+}
+
+#video-grid {
+  height: calc(100% - 150px);
+}
+
+#video-grid video{
+  border: 5px solid #fae8eb;
+  margin: 10px;
+  object-fit: fill;
+}
