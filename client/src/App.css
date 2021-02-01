@@ -82,7 +82,7 @@
 
 .video-main {
   
-  width: 100vw;
+  /* width: 100vw; */
   height: 100vh;
 }
 
@@ -94,4 +94,20 @@
   border: 5px solid #fae8eb;
   margin: 10px;
   object-fit: fill;
+}
+
+/* .video-controls {
+  background-color: #fae8eb;
+} */
+.control-icon {
+  color: #fae8eb;
+}
+
+.control-icon i {
+  font-size:36px;
+
+}
+
+.video-controls .btn:hover {
+  color: #faf3f4;
 }

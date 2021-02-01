@@ -1,19 +1,19 @@
 import React, { useRef, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { socket } from '../service/socket';
 
 let peers = {};
 
 const Video = () => {
+    let history = useHistory();
     const localVideoref = useRef();
     const { url } = useParams();
 
     useEffect(() => {
 
         window.onpopstate = event => {
-            // To do
             // leave user from socket room
-            console.log(event);
+            socket.emit('leave-room');
         }
 
         socket.on('error', error => {
@@ -157,15 +157,65 @@ const Video = () => {
 
     }, [url])
 
+    const handleAudio = (e) => {
+        // console.log(e.target.innerHTML,localVideoref.current.srcObject.getAudioTracks()[0].enabled)
+        if(!localVideoref.current) return;
+        const enabled = localVideoref.current.srcObject.getAudioTracks()[0].enabled;
+        if(enabled) {
+            localVideoref.current.srcObject.getAudioTracks()[0].enabled=false;
+            e.target.innerHTML = "mic_off";
+        }
+        else {
+            localVideoref.current.srcObject.getAudioTracks()[0].enabled = true;
+            e.target.innerHTML = "mic";
+        }
+    }
+
+    const handleVideoCam = (e) => {
+        if(!localVideoref.current) return;
+        const enabled = localVideoref.current.srcObject.getVideoTracks()[0].enabled;
+        if(enabled) {
+            localVideoref.current.srcObject.getVideoTracks()[0].enabled=false;
+            e.target.innerHTML = "videocam_off";
+        }
+        else {
+            localVideoref.current.srcObject.getVideoTracks()[0].enabled = true;
+            e.target.innerHTML = "videocam";
+        }
+    }
+
+    const handleCallEnd = () => {
+        socket.emit('leave-room');
+        history.push('/');
+
+    }
 
 
     return (
         <>
             <div className="video-container">
                 <div className="video-main">
-                    <div id="video-grid" className="d-flex flex-row justify-content-center flex-wrap">
-                        <video ref={localVideoref} id="my-video" style={{border: "5px solid #fae8eb", margin: "10px", objectFit: "fill", width: "100%", height:"100%"}}></video>
+                    <div className="container">
+                        
                     </div>
+                    <div id="video-grid" className="d-flex flex-row justify-content-center flex-wrap">
+                        <video ref={localVideoref} id="my-video" style={{ border: "5px solid #fae8eb", margin: "10px", objectFit: "fill", width: "100%", height: "100%" }}></video>
+                    </div>
+                </div>
+                <div className="video-controls container position-fixed fixed-bottom">                        <div className="row d-flex justify-content-center">
+                    <div className="col-auto">
+                        <button className="control-icon btn" onClick={e => handleAudio(e)}><i className="material-icons">mic</i></button>
+                    </div>
+                    <div className="col-auto">
+                        <button className="control-icon btn" onClick={e => handleVideoCam(e)}><i className="material-icons">videocam</i></button>
+                    </div>
+                    <div className="col-auto">
+                        <button className="control-icon btn" onClick={e => handleCallEnd()}><i className="material-icons" style={{ color: "#e5383b" }}>call_end</i></button>
+                    </div>
+                    <div className="col-auto">
+                        <button className="control-icon btn"><i className="material-icons" style={{}}>chat</i></button>
+                    </div>
+                </div>
                 </div>
             </div>
         </>

@@ -39,6 +39,11 @@ io.on('connection', (socket) => {
             console.log("user disconnected",userId);
             socket.to(roomId).broadcast.emit('user-disconnected', userId);
         });
+        
+        socket.on('leave-room', () => {
+            socket.leave(roomId);
+            socket.to(roomId).broadcast.emit('user-disconnected', userId);
+        })
     });
     socket.on("create-meet-id", () => {
         let id=v4()
