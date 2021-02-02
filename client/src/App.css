@@ -1,41 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Hanalei&family=Hanalei+Fill&family=Open+Sans&family=Roboto:wght@700&display=swap');
 .App {
   text-align: center;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  padding: 0px;
+  margin: 0px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body{
+  background-color: #2E1F27;
 }
 
 .home {
@@ -61,7 +38,7 @@
 
 .home .title p{
   font-weight: 900;
-  font-size: 40px;
+  font-size: 38px;
 
 }
 
@@ -86,6 +63,11 @@
   height: 100vh;
 }
 
+.video-main .invite-link button{
+  color: #2E1F27;
+  background-color: #fae8eb;
+}
+
 #video-grid {
   height: calc(100% - 150px);
 }
@@ -96,9 +78,9 @@
   object-fit: fill;
 }
 
-/* .video-controls {
-  background-color: #fae8eb;
-} */
+.video-controls {
+  background-color: #2E1F27;
+}
 .control-icon {
   color: #fae8eb;
 }
@@ -114,13 +96,20 @@
 
 #chat {
   background-color: #fae8eb;
-  height: calc(100vh - 25px);
+  height: calc(100vh - 150px);
+  margin-bottom: 150px;
+
 }
 
 #chat h2 {
   color: #2E1F27;
   text-align: center;
   border-bottom: solid 2px;
+}
+
+#chat input {
+  border-radius: 10px;
+  border: solid 1px #2E1F27;
 }
 
 .create-message {

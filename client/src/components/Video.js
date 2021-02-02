@@ -224,24 +224,51 @@ const Video = () => {
         messageref.current.value = "";
     }
 
+    const copyUrl = () => {
+        let text = window.location.href
+		if (!navigator.clipboard) {
+			let textArea = document.createElement("textarea")
+			textArea.value = text
+			document.body.appendChild(textArea)
+			textArea.focus()
+			textArea.select()
+			try {
+				document.execCommand('copy')
+				window.confirm("Link copied to clipboard!")
+			} catch (err) {
+				window.confirm("Failed to copy")
+			}
+			document.body.removeChild(textArea)
+			return
+		}
+		navigator.clipboard.writeText(text).then(function () {
+			window.confirm("Link copied to clipboard!")
+		}, () => {
+			window.confirm("Failed to copy")
+		})
+	}
+
 
     return (
         <>
             <div className="video-container">
-                <div className="video-main row">
-                    {/* <div className="container">
-
-                    </div> */}
-                    <div id="video-grid" className="col-md-9 d-flex flex-row justify-content-center flex-wrap">
+                <div className="video-main">
+                    <div className="container invite-link d-flex justify-content-center">
+                        <div className="col-md-6 input-group mt-2 mb-md-2">
+                            <input disabled={true} className="form-control" value={window.location.href} aria-describedby="basic-addon2" ></input>
+                            <button className="input-group-addon btn" id="basic-addon2" onClick={e => copyUrl()}>Copy Invite Link</button>
+                        </div>
+                    </div>
+                    <div id="video-grid" className="d-flex flex-row justify-content-center flex-wrap">
                         <video ref={localVideoref} id="my-video" style={{ border: "5px solid #fae8eb", margin: "10px", objectFit: "fill", width: "100%", height: "100%" }}></video>
                     </div>
-                    <div id="chat" className="collapse col-md-2 position-relative">
+                    <div id="chat" className="collapse position-relative">
                         <div>
                             <h2>Chat</h2>
                         </div>
                         <div>
                             <ul className="messages">
-                                {messages.map((message,index) => <li key={index} className="message">{message}</li>)}
+                                {messages.map((message, index) => <li key={index} className="message">{message}</li>)}
                             </ul>
                         </div>
                         <div className="input-group create-message position-absolute">
