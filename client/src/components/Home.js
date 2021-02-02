@@ -18,6 +18,7 @@ const Home = () => {
         let redirectUrl="";
         if (url !== "") {
             redirectUrl = url.substring(url.lastIndexOf('/'));
+            socket.off('meet-id');
             history.push(redirectUrl);
         }
         else {
@@ -26,9 +27,11 @@ const Home = () => {
                 console.log(id);
                 redirectUrl = `/${id}`;
                 console.log('setredurl',redirectUrl)
+                socket.off('meet-id');
                 history.push(redirectUrl);
             })
         }
+        console.log('joining');
     }
 
     return (

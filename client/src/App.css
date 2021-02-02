@@ -111,3 +111,19 @@
 .video-controls .btn:hover {
   color: #faf3f4;
 }
+
+#chat {
+  background-color: #fae8eb;
+  height: calc(100vh - 25px);
+}
+
+#chat h2 {
+  color: #2E1F27;
+  text-align: center;
+  border-bottom: solid 2px;
+}
+
+.create-message {
+  bottom: 0;
+  z-index: 1000;
+}

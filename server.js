@@ -30,6 +30,7 @@ app.get('/:room', (req, res) => {
 })
 
 io.on('connection', (socket) => {
+    console.log("new connection");
     socket.on("join-room", (roomId, userId) => {
         // console.log(roomId," ",userId);
         socket.join(roomId);
@@ -39,13 +40,18 @@ io.on('connection', (socket) => {
             console.log("user disconnected",userId);
             socket.to(roomId).broadcast.emit('user-disconnected', userId);
         });
-        
+
         socket.on('leave-room', () => {
             socket.leave(roomId);
             socket.to(roomId).broadcast.emit('user-disconnected', userId);
-        })
+        });
+
+        socket.on('message', (message) => {
+            io.to(roomId).emit('createMessage', message);
+        }); 
     });
     socket.on("create-meet-id", () => {
+        console.log('id created')
         let id=v4()
         socket.emit('meet-id', id);
     });
