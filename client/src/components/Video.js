@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { socket } from '../service/socket';
 
@@ -11,7 +11,52 @@ const Video = () => {
     const { url } = useParams();
     const [chat, setchat] = useState({ open: false })
     const [messages, setmessages] = useState([]);
+    const [videoGridStyle, setvideoGridStyle] = useState({
+        width: "100%"
+    });
+    const [chatStyle, setchatStyle] = useState({ width: "100%" });
+    const [style, setstyle] = useState({
+        flexDirection: "row"
+    })
 
+    const handleChatChange = useCallback(e => {
+        if (e.matches) {
+            if (chat.open) {
+                setvideoGridStyle({
+                    width: "75%"
+                });
+                setchatStyle({
+                    width: "25%"
+                });
+                setstyle({
+                    flexDirection: "row"
+                })
+            }
+            else {
+                setvideoGridStyle({
+                    width: "100%"
+                });
+                setchatStyle({
+                    width: "100%"
+                });
+                setstyle({
+                    flexDirection: "column"
+                })
+            }
+
+        }
+        else {
+            setvideoGridStyle({
+                width: "100%"
+            });
+            setchatStyle({
+                width: "100%"
+            });
+            setstyle({
+                flexDirection: "column"
+            })
+        }
+    },[chat])
 
 
     useEffect(() => {
@@ -24,6 +69,55 @@ const Video = () => {
         })
 
     }, [messages]);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(min-width: 768px)');
+        handleChatChange(mediaQuery)
+    }, [chat, handleChatChange])
+
+    useEffect(() => {
+        // const handleChatChange = e => {
+        //     console.log(e.matches)
+        //     if (e.matches) {
+        //         if (chat.open) {
+        //             setvideoGridStyle({
+        //                 width: "75%"
+        //             });
+        //             setchatStyle({
+        //                 width: "25%"
+        //             });
+        //             setstyle({
+        //                 flexDirection: "row"
+        //             })
+        //         }
+        //         else {
+        //             setvideoGridStyle({
+        //                 width: "100%"
+        //             });
+        //             setchatStyle({
+        //                 width: "100%"
+        //             });
+        //             setstyle({
+        //                 flexDirection: "column"
+        //             })
+        //         }
+
+        //     }
+        //     else {
+        //         setvideoGridStyle({
+        //             width: "100%"
+        //         });
+        //         setchatStyle({
+        //             width: "100%"
+        //         });
+        //         setstyle({
+        //             flexDirection: "column"
+        //         })
+        //     }
+        // }
+        const mediaQuery = window.matchMedia('(min-width: 768px)');
+        mediaQuery.addEventListener('change', handleChatChange)
+    },[handleChatChange])
 
 
     useEffect(() => {
@@ -169,6 +263,8 @@ const Video = () => {
 
     }, [url])
 
+
+
     const handleAudio = (e) => {
         // console.log(e.target.innerHTML,localVideoref.current.srcObject.getAudioTracks()[0].enabled)
         if (!localVideoref.current) return;
@@ -226,60 +322,66 @@ const Video = () => {
 
     const copyUrl = () => {
         let text = window.location.href
-		if (!navigator.clipboard) {
-			let textArea = document.createElement("textarea")
-			textArea.value = text
-			document.body.appendChild(textArea)
-			textArea.focus()
-			textArea.select()
-			try {
-				document.execCommand('copy')
-				window.confirm("Link copied to clipboard!")
-			} catch (err) {
-				window.confirm("Failed to copy")
-			}
-			document.body.removeChild(textArea)
-			return
-		}
-		navigator.clipboard.writeText(text).then(function () {
-			window.confirm("Link copied to clipboard!")
-		}, () => {
-			window.confirm("Failed to copy")
-		})
-	}
+        if (!navigator.clipboard) {
+            let textArea = document.createElement("textarea")
+            textArea.value = text
+            document.body.appendChild(textArea)
+            textArea.focus()
+            textArea.select()
+            try {
+                document.execCommand('copy')
+                window.confirm("Link copied to clipboard!")
+            } catch (err) {
+                window.confirm("Failed to copy")
+            }
+            document.body.removeChild(textArea)
+            return
+        }
+        navigator.clipboard.writeText(text).then(function () {
+            window.confirm("Link copied to clipboard!")
+        }, () => {
+            window.confirm("Failed to copy")
+        })
+    }
 
 
     return (
         <>
             <div className="video-container">
-                <div className="video-main">
-                    <div className="container invite-link d-flex justify-content-center">
-                        <div className="col-md-6 input-group mt-2 mb-md-2">
-                            <input disabled={true} className="form-control" value={window.location.href} aria-describedby="basic-addon2" ></input>
-                            <button className="input-group-addon btn" id="basic-addon2" onClick={e => copyUrl()}>Copy Invite Link</button>
+                <div className="container invite-link d-flex justify-content-center">
+                    <div className="col-md-6 input-group mt-2 mb-md-2">
+                        <input disabled={true} className="form-control" value={window.location.href} aria-describedby="basic-addon2" ></input>
+                        <button className="input-group-addon btn" id="basic-addon2" onClick={e => copyUrl()}>Copy Invite Link</button>
+                    </div>
+                </div>
+                <div className="d-flex" style={style} >
+                    <div className="video-main" style={videoGridStyle}>
+                        <div id="video-grid" className="d-flex flex-row justify-content-center flex-wrap" >
+                            <video ref={localVideoref} id="my-video" style={{ border: "5px solid #fae8eb", margin: "10px", objectFit: "fill", width: "100%", height: "100%" }}></video>
                         </div>
                     </div>
-                    <div id="video-grid" className="d-flex flex-row justify-content-center flex-wrap">
-                        <video ref={localVideoref} id="my-video" style={{ border: "5px solid #fae8eb", margin: "10px", objectFit: "fill", width: "100%", height: "100%" }}></video>
-                    </div>
-                    <div id="chat" className="collapse position-relative">
+
+                    <div id="chat" className="collapse position-relative" style={{ border: "solid 5px", ...chatStyle }}>
                         <div>
                             <h2>Chat</h2>
                         </div>
                         <div>
                             <ul className="messages">
-                                {messages.map((message, index) => <li key={index} className="message">{message}</li>)}
+                                {messages.map((message, index) => <li key={index} className="message"><i style={{color:"#E21D12"}}>{`> `}</i>{message}</li>)}
                             </ul>
                         </div>
                         <div className="input-group create-message position-absolute">
                             <input ref={messageref} id="chat-message" className="form-control" type="text" placeholder="message" aria-describedby="basic-addon2" ></input>
                             <div className="input-group-append">
-                                <button className="btn" onClick={e => sendMessage(e)}><i className="material-icons">send</i></button>
+                                <span className="btn" onClick={e => sendMessage(e)} role="button"><span className="material-icons">send</span></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="video-controls container position-fixed fixed-bottom">                        <div className="row d-flex justify-content-center">
+
+            </div>
+            <div className="video-controls container-fluid position-fixed fixed-bottom">
+                <div className="row d-flex justify-content-center">
                     <div className="col-auto">
                         <button className="control-icon btn" onClick={e => handleAudio(e)}><i className="material-icons">mic</i></button>
                     </div>
@@ -292,7 +394,6 @@ const Video = () => {
                     <div className="col-auto">
                         <button href="#chat" className="control-icon btn" data-toggle="collapse" onClick={e => handleChat()}><i className="material-icons" style={{}}>chat</i></button>
                     </div>
-                </div>
                 </div>
             </div>
         </>

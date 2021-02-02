@@ -63,7 +63,7 @@ body{
   height: 100vh;
 }
 
-.video-main .invite-link button{
+.video-container .invite-link button{
   color: #2E1F27;
   background-color: #fae8eb;
 }
@@ -86,8 +86,13 @@ body{
 }
 
 .control-icon i {
-  font-size:36px;
+  font-size:30px;
 
+}
+@media only screen and (min-width: 600px) {
+  .control-icon i {
+    font-size:42px;
+  }
 }
 
 .video-controls .btn:hover {
@@ -97,8 +102,8 @@ body{
 #chat {
   background-color: #fae8eb;
   height: calc(100vh - 150px);
-  margin-bottom: 150px;
-
+  margin-top: 10px;
+  margin-bottom: 50px;
 }
 
 #chat h2 {
@@ -113,6 +118,20 @@ body{
 }
 
 .create-message {
-  bottom: 0;
-  z-index: 1000;
+  bottom: 0px;
+}
+.messages {
+  list-style: none;
+  padding: 1px;
+}
+
+.message {
+  margin-bottom: 2px;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: black;
+  border-radius: 5px;
+  border: 1px solid #E21D12;
+  font-family: 'Times New Roman', Times, serif;
+  padding-left: 1px;
 }
